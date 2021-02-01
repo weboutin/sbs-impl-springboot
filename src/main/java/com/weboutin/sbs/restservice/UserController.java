@@ -9,6 +9,7 @@ import org.json.JSONException;
 
 import com.weboutin.sbs.entity.User;
 import com.weboutin.sbs.service.UserService;
+import com.weboutin.sbs.utils.Utils;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -22,32 +23,19 @@ public class UserController {
 			String account = input.optString("account");
 			String password = input.optString("password");
 			Integer userId = UserService.register(account, password);
-			Map result = new HashMap();
-			Map data = new HashMap();
-			result.put("code", 0);
-			result.put("msg", "注册成功");
-			result.put("data", data);
-			return result;
+			return Utils.buildResponse(0, "注册成功", new HashMap());
         } catch (Exception e) {
             Map result = new HashMap();
 			Map data = new HashMap();
             if (e.getMessage() == null) {
                 e.printStackTrace();
-                result.put("code", -1);
-				result.put("msg", "系统异常");
-				result.put("data", data);
+                return Utils.buildResponse(-1, "系统异常", new HashMap());
             }
             if (e.getMessage().equals("user already exist")) {
-                result.put("code", 2);
-				result.put("msg", "用户已经存在");
-				result.put("data", data);
-			} else {
-				e.printStackTrace();
-                result.put("code", -1);
-				result.put("msg", "系统异常");
-				result.put("data", data);
-			}
-			return result;
+				return Utils.buildResponse(2, "用户已存在", new HashMap());
+			} 
+			e.printStackTrace();
+            return Utils.buildResponse(-1, "系统异常", new HashMap());
         }
 	}
 }

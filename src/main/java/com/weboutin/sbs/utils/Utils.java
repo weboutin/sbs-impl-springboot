@@ -1,6 +1,8 @@
 package com.weboutin.sbs.utils;
 
 import java.io.*;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Utils {
     final static String secretKey = "sbs-impl-cookie-secret-key";
@@ -12,6 +14,14 @@ public class Utils {
         // Cookie mycookie = new Cookie("session-id", encryptedString);
         // response.addCookie(mycookie);
         return "encryptedString";
+    }
+    
+    public static Map buildResponse(Integer code, String message, Map data) {
+        Map result = new HashMap();
+        result.put("code", code);
+        result.put("msg", message);
+        result.put("data", data);
+        return result;
     }
 
     // public static JSONObject parseSessionCookie(Cookie[] cookies) throws Exception {

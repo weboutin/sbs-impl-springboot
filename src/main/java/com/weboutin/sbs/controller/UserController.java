@@ -1,5 +1,5 @@
 
-package com.weboutin.sbs.restservice;
+package com.weboutin.sbs.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import com.weboutin.sbs.entity.User;
 import com.weboutin.sbs.service.UserService;
 import com.weboutin.sbs.utils.Utils;
 
@@ -23,10 +22,12 @@ public class UserController {
 			String account = input.optString("account");
 			String password = input.optString("password");
 			Integer userId = UserService.register(account, password);
-			return Utils.buildResponse(0, "注册成功", new HashMap());
+			Map result = new HashMap();
+			result.put("userId", userId);
+			return Utils.buildResponse(0, "注册成功", result);
+		} catch (JSONException e) {
+			return Utils.buildResponse(1, "参数错误", new HashMap());
         } catch (Exception e) {
-            Map result = new HashMap();
-			Map data = new HashMap();
             if (e.getMessage() == null) {
                 e.printStackTrace();
                 return Utils.buildResponse(-1, "系统异常", new HashMap());

@@ -2,18 +2,23 @@ package com.weboutin.sbs.utils;
 
 import java.io.*;
 import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 public class Utils {
     final static String secretKey = "sbs-impl-cookie-secret-key";
 
 
-    public static String createAndSetSessionCookie() {
-        // String originalString = data.toString();
-        // String encryptedString = AES.encrypt(originalString, secretKey);
-        // Cookie mycookie = new Cookie("session-id", encryptedString);
-        // response.addCookie(mycookie);
-        return "encryptedString";
+    public static void createAndSetSessionCookie(HttpServletResponse response, JSONObject data) {
+        String originalString = data.toString();
+        String encryptedString = AES.encrypt(originalString, secretKey);
+        Cookie mycookie = new Cookie("session-id", encryptedString);
+        response.addCookie(mycookie);
     }
     
     public static Map buildResponse(Integer code, String message, Map data) {

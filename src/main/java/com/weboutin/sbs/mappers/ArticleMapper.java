@@ -16,10 +16,10 @@ public interface ArticleMapper {
     @Options(useGeneratedKeys = true, keyProperty = "article.articleId", keyColumn = "id")
     Integer insertArticle(@Param("article") Article article);
 
-    @Select("select *,id articleId, created_at createdAt, modified_at modifiedAt from `sbs-articles` limit #{page},#{size}")
+    @Select("select *,id articleId,user_id userId, created_at createdAt, modified_at modifiedAt from `sbs-articles` limit #{page},#{size}")
     List<Article> getArticles(@Param("page") Integer page, @Param("size") Integer size);
 
-    @Select("select *,id articleId, created_at createdAt, modified_at modifiedAt from `sbs-articles` where id = #{articleId}")
+    @Select("select *,id articleId,user_id userId, created_at createdAt, modified_at modifiedAt from `sbs-articles` where id = #{articleId}")
     Article getArticleById(@Param("articleId") Integer article);
 
     @Update("update `sbs-articles` set title=#{article.title}, content=#{article.content},modified_at=#{article.modifiedAt} where id = #{article.articleId} and user_id=#{article.userId}")

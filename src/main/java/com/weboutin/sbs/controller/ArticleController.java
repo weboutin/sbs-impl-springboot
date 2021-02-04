@@ -1,8 +1,10 @@
 package com.weboutin.sbs.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.weboutin.sbs.entity.Article;
 import com.weboutin.sbs.service.ArticleService;
 import com.weboutin.sbs.utils.Utils;
 
@@ -10,9 +12,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -79,47 +83,22 @@ public class ArticleController {
                 return Utils.buildResponse(-1, "系统异常", result);
             }
         }
-
     }
 
-    // /**
-    // * DELETE /v1/articles/:articleId
-    // */
-    // public void doDelete(HttpServletRequest request, HttpServletResponse
-    // response)
-    // throws ServletException, IOException {
-    // try {
-    // String pathInfo = request.getPathInfo();
-    // Integer articleId = null;
-    // String[] pathParts = pathInfo.split("/");
-    // articleId = Integer.parseInt(pathParts[1]);
+    @GetMapping("/v1/articles")
+    public Map list(@RequestParam(value="page", defaultValue="1") Integer page) throws Exception {
+        int size = 10;
+        List<Article> articles = ArticleService.getAll(page, size);
+        Map result = new HashMap();
+        result.put("articles", articles);
+        return Utils.buildResponse(0, "获取成功", result);
+    }
 
-    // JSONObject session = Utils.parseSessionCookie(request.getCookies());
-    // Integer userId = session.optInt("userId");
-    // ArticlesService.remove(userId, articleId);
-    // JSONObject data = new JSONObject();
-    // Utils.buildResponse(response, 0, "删除成功", data);
-    // } catch (NumberFormatException e) {
-    // JSONObject data = new JSONObject();
-    // Utils.buildResponse(response, 1, "参数异常", data);
-    // } catch (JSONException e) {
-    // JSONObject data = new JSONObject();
-    // Utils.buildResponse(response, 1, "参数异常", data);
-    // } catch (Exception e) {
-    // JSONObject data = new JSONObject();
-    // e.printStackTrace();
-    // if (e.getMessage() == null) {
-    // Utils.buildResponse(response, -1, "系统异常", data);
-    // }
-    // if (e.getMessage().equals("Access Denied")) {
-    // Utils.buildResponse(response, -1, "无访问权限", data);
-    // } else if (e.getMessage().equals("Remove error")) {
-    // Utils.buildResponse(response, -1, "删除失败", data);
-    // } else if (e.getMessage().equals("Cookie parse error")) {
-    // Utils.buildResponse(response, -1, "无访问权限", data);
-    // } else {
-    // Utils.buildResponse(response, -1, "系统异常", data);
-    // }
-    // }
-    // }
+    @GetMapping("/v1/articles/{articleId}")
+    public Map Detail(@PathVariable("articleId") Integer articleId) throws Exception{
+        Article article = ArticleService.getDetail(articleId);
+        Map result = new HashMap();
+        result.put("article", article);
+        return Utils.buildResponse(0, "获取成功", result);
+    }
 }

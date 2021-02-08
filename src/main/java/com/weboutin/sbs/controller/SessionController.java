@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,9 @@ import com.weboutin.sbs.utils.Utils;
 
 @RestController
 public class SessionController {
+
+    @Autowired
+    SessionService sessionService;
     
     @PostMapping("/v1/sessions")
 	public Map create(HttpServletResponse response, @RequestBody String payload) throws Exception {
@@ -24,7 +28,7 @@ public class SessionController {
             JSONObject input = new JSONObject(payload);
 			String account = input.optString("account");
 			String password = input.optString("password");
-            Integer userId = SessionService.auth(account, password);
+            Integer userId = sessionService.auth(account, password);
             JSONObject sessionObj = new JSONObject();
             sessionObj.put("userId", userId);
             Utils.createAndSetSessionCookie(response, sessionObj);

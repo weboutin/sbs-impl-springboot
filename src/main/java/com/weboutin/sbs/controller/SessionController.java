@@ -20,7 +20,7 @@ import com.weboutin.sbs.utils.Utils;
 public class SessionController {
 
     @Autowired
-    SessionService sessionService;
+    private SessionService sessionService;
     
     @PostMapping("/v1/sessions")
 	public Map create(HttpServletResponse response, @RequestBody String payload) throws Exception {

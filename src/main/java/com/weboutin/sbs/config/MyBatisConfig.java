@@ -21,12 +21,12 @@ public class MyBatisConfig {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSource());
-        return factoryBean.getObject();
-    }
+    // @Bean
+    // public SqlSessionFactory sqlSessionFactory() throws Exception {
+    //     SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+    //     factoryBean.setDataSource(dataSource());
+    //     return factoryBean.getObject();
+    // }
 
     // @Bean
     // public UserMapper userMapper() throws Exception {

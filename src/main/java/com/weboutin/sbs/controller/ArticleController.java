@@ -10,6 +10,7 @@ import com.weboutin.sbs.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ArticleController {
+
+    @Autowired
+    private ArticleService articleService;
+
     @PostMapping("/v1/articles")
     public Map create(@RequestBody String payload, @CookieValue(value = "session-id") String sessionId) {
         try {
@@ -30,7 +35,7 @@ public class ArticleController {
 
             JSONObject session = Utils.parseSessionCookie(sessionId);
             Integer userId = session.optInt("userId");
-            Integer articleId = ArticleService.create(userId, title, content);
+            Integer articleId = articleService.create(userId, title, content);
             Map result = new HashMap();
             result.put("articleId", articleId);
             return Utils.buildResponse(0, "创建成功", result);
@@ -58,7 +63,7 @@ public class ArticleController {
         try {
             JSONObject session = Utils.parseSessionCookie(sessionId);
             Integer userId = session.optInt("userId");
-            ArticleService.remove(userId, articleId);
+            articleService.remove(userId, articleId);
             Map result = new HashMap();
             return Utils.buildResponse(0, "删除成功", result);
         } catch (NumberFormatException e) {
@@ -86,17 +91,17 @@ public class ArticleController {
     }
 
     @GetMapping("/v1/articles")
-    public Map list(@RequestParam(value="page", defaultValue="1") Integer page) throws Exception {
+    public Map list(@RequestParam(value = "page", defaultValue = "1") Integer page) throws Exception {
         int size = 10;
-        List<Article> articles = ArticleService.getAll(page, size);
+        List<Article> articles = articleService.getAll(page, size);
         Map result = new HashMap();
         result.put("articles", articles);
         return Utils.buildResponse(0, "获取成功", result);
     }
 
     @GetMapping("/v1/articles/{articleId}")
-    public Map Detail(@PathVariable("articleId") Integer articleId) throws Exception{
-        Article article = ArticleService.getDetail(articleId);
+    public Map Detail(@PathVariable("articleId") Integer articleId) throws Exception {
+        Article article = articleService.getDetail(articleId);
         Map result = new HashMap();
         result.put("article", article);
         return Utils.buildResponse(0, "获取成功", result);

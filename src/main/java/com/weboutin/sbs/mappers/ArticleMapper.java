@@ -2,6 +2,7 @@ package com.weboutin.sbs.mappers;
 
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import com.weboutin.sbs.entity.Article;
 
+@Mapper
 public interface ArticleMapper {
     @Insert("insert into `sbs-articles` (user_id,title,content,created_at,modified_at) "
             + "values(#{article.userId},#{article.title},#{article.content},#{article.createdAt},#{article.modifiedAt})")

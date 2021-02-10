@@ -15,8 +15,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public Integer register(String account, String password) throws Exception {
-
+    public  Integer register(String account, String password) throws Exception {
         User user = userMapper.selectUserByAccount(account);
         if (user != null) {
             throw new Exception("user already exist");

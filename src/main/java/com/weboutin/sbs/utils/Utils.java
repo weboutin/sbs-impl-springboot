@@ -1,6 +1,5 @@
 package com.weboutin.sbs.utils;
 
-import java.io.*;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -20,8 +19,8 @@ public class Utils {
         response.addCookie(mycookie);
     }
 
-    public static Map buildResponse(Integer code, String message, Map data) {
-        Map result = new HashMap();
+    public static Map<String, Object> buildResponse(Integer code, String message, Map data) {
+        Map<String, Object> result = new HashMap<>();
         result.put("code", code);
         result.put("msg", message);
         result.put("data", data);

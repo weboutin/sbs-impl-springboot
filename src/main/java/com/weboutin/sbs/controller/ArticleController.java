@@ -27,7 +27,8 @@ public class ArticleController {
     private ArticleService articleService;
 
     @PostMapping("/v1/articles")
-    public Map create(@RequestBody String payload, @CookieValue(value = "session-id") String sessionId) {
+    public Map<String, Object> create(@RequestBody String payload,
+            @CookieValue(value = "session-id") String sessionId) {
         try {
             JSONObject input = new JSONObject(payload);
             String title = input.optString("title");
@@ -36,14 +37,14 @@ public class ArticleController {
             JSONObject session = Utils.parseSessionCookie(sessionId);
             Integer userId = session.optInt("userId");
             Integer articleId = articleService.create(userId, title, content);
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             result.put("articleId", articleId);
             return Utils.buildResponse(0, "创建成功", result);
         } catch (JSONException e) {
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             return Utils.buildResponse(1, "参数异常", result);
         } catch (Exception e) {
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             if (e.getMessage() == null) {
                 e.printStackTrace();
                 return Utils.buildResponse(-1, "系统异常", result);
@@ -58,22 +59,22 @@ public class ArticleController {
     }
 
     @DeleteMapping("/v1/articles/{articleId}")
-    public Map remove(@PathVariable("articleId") Integer articleId, @CookieValue(value = "session-id") String sessionId)
-            throws Exception {
+    public Map<String, Object> remove(@PathVariable("articleId") Integer articleId,
+            @CookieValue(value = "session-id") String sessionId) throws Exception {
         try {
             JSONObject session = Utils.parseSessionCookie(sessionId);
             Integer userId = session.optInt("userId");
             articleService.remove(userId, articleId);
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             return Utils.buildResponse(0, "删除成功", result);
         } catch (NumberFormatException e) {
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             return Utils.buildResponse(1, "参数异常", result);
         } catch (JSONException e) {
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             return Utils.buildResponse(1, "参数异常", result);
         } catch (Exception e) {
-            Map result = new HashMap();
+            Map<String, Object> result = new HashMap<>();
             e.printStackTrace();
             if (e.getMessage() == null) {
                 return Utils.buildResponse(-1, "系统异常", result);
@@ -91,18 +92,18 @@ public class ArticleController {
     }
 
     @GetMapping("/v1/articles")
-    public Map list(@RequestParam(value = "page", defaultValue = "1") Integer page) throws Exception {
+    public Map<String, Object> list(@RequestParam(value = "page", defaultValue = "1") Integer page) throws Exception {
         int size = 10;
         List<Article> articles = articleService.getAll(page, size);
-        Map result = new HashMap();
+        Map<String, Object> result = new HashMap<>();
         result.put("articles", articles);
         return Utils.buildResponse(0, "获取成功", result);
     }
 
     @GetMapping("/v1/articles/{articleId}")
-    public Map Detail(@PathVariable("articleId") Integer articleId) throws Exception {
+    public Map<String, Object> Detail(@PathVariable("articleId") Integer articleId) throws Exception {
         Article article = articleService.getDetail(articleId);
-        Map result = new HashMap();
+        Map<String, Object> result = new HashMap<>();
         result.put("article", article);
         return Utils.buildResponse(0, "获取成功", result);
     }

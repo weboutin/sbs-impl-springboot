@@ -21,27 +21,27 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/v1/users")
-	public Map create(@RequestBody String payload) throws Exception {
+	public Map<String, Object> create(@RequestBody String payload) throws Exception {
 		try {
 			JSONObject input = new JSONObject(payload);
 			String account = input.optString("account");
 			String password = input.optString("password");
 			Integer userId = userService.register(account, password);
-			Map result = new HashMap();
+			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("userId", userId);
 			return Utils.buildResponse(0, "注册成功", result);
 		} catch (JSONException e) {
-			return Utils.buildResponse(1, "参数错误", new HashMap());
+			return Utils.buildResponse(1, "参数错误", new HashMap<>());
 		} catch (Exception e) {
 			if (e.getMessage() == null) {
 				e.printStackTrace();
-				return Utils.buildResponse(-1, "系统异常", new HashMap());
+				return Utils.buildResponse(-1, "系统异常", new HashMap<>());
 			}
 			if (e.getMessage().equals("user already exist")) {
-				return Utils.buildResponse(2, "用户已存在", new HashMap());
+				return Utils.buildResponse(2, "用户已存在", new HashMap<>());
 			}
 			e.printStackTrace();
-			return Utils.buildResponse(-1, "系统异常", new HashMap());
+			return Utils.buildResponse(-1, "系统异常", new HashMap<>());
 		}
 	}
 }

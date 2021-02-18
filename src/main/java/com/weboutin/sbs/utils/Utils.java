@@ -19,7 +19,7 @@ public class Utils {
         response.addCookie(mycookie);
     }
 
-    public static Map<String, Object> buildResponse(Integer code, String message, Map data) {
+    public static Map<String, Object> buildResponse(Integer code, String message, Map<String, Object> data) {
         Map<String, Object> result = new HashMap<>();
         result.put("code", code);
         result.put("msg", message);

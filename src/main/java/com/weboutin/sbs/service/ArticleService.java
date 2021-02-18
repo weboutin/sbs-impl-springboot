@@ -5,9 +5,10 @@ import java.util.List;
 import com.weboutin.sbs.entity.Article;
 import com.weboutin.sbs.mappers.ArticleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+@Component
 public class ArticleService {
 
     @Autowired

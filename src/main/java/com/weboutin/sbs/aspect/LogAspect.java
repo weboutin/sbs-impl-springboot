@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import com.weboutin.sbs.annotation.NeedLogin;
 import com.weboutin.sbs.utils.Utils;
 
 import org.aspectj.lang.JoinPoint;
@@ -30,6 +31,10 @@ public class LogAspect {
     public void controllerAspect() {
     }
 
+    @Pointcut("@annotation(com.weboutin.sbs.annotation.NeedLogin)")
+    private void needLogin() {
+    }
+
     @Before("controllerAspect()")
     public void doBefore(JoinPoint joinPoint) throws InterruptedException {
         for (Object arg : joinPoint.getArgs()) {
@@ -44,7 +49,7 @@ public class LogAspect {
         System.out.println(retVal);
     }
 
-    @Around("controllerAspect()")
+    @Around("needLogin()")
     public Object Authenfication(ProceedingJoinPoint point) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -59,16 +64,21 @@ public class LogAspect {
             return Utils.buildResponse(-1, "无访问权限", new HashMap<>());
         }
 
-        JSONObject session = Utils.parseSessionCookie(sessionCookieStr);
-        Integer userId = session.optInt("userId");
-        List<Object> list = new ArrayList<Object>();
-        for (Object arg : point.getArgs()) {
-            if (arg != null) {
-                list.add(arg);
+        try {
+            JSONObject session = Utils.parseSessionCookie(sessionCookieStr);
+            Integer userId = session.optInt("userId");
+            List<Object> list = new ArrayList<Object>();
+            for (Object arg : point.getArgs()) {
+                if (arg != null) {
+                    list.add(arg);
+                }
             }
+            list.add(userId);
+            return point.proceed(list.toArray());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Utils.buildResponse(-1, "无访问权限", new HashMap<>());
         }
-        list.add(userId);
-        return point.proceed(list.toArray());
     }
 
 }

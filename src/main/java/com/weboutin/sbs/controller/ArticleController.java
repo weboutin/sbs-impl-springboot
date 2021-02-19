@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.weboutin.sbs.annotation.NeedLogin;
 import com.weboutin.sbs.entity.Article;
 import com.weboutin.sbs.service.ArticleService;
 import com.weboutin.sbs.utils.Utils;
@@ -26,16 +27,13 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    @NeedLogin
     @PostMapping("/v1/articles")
-    public Map<String, Object> create(@RequestBody String payload,
-            @CookieValue(value = "session-id") String sessionId) {
+    public Map<String, Object> create(@RequestBody String payload, Integer userId) {
         try {
             JSONObject input = new JSONObject(payload);
             String title = input.optString("title");
             String content = input.optString("content");
-
-            JSONObject session = Utils.parseSessionCookie(sessionId);
-            Integer userId = session.optInt("userId");
             Integer articleId = articleService.create(userId, title, content);
             Map<String, Object> result = new HashMap<>();
             result.put("articleId", articleId);
@@ -58,12 +56,10 @@ public class ArticleController {
         }
     }
 
+    @NeedLogin
     @DeleteMapping("/v1/articles/{articleId}")
-    public Map<String, Object> remove(@PathVariable("articleId") Integer articleId,
-            @CookieValue(value = "session-id") String sessionId) throws Exception {
+    public Map<String, Object> remove(@PathVariable("articleId") Integer articleId, Integer userId) throws Exception {
         try {
-            JSONObject session = Utils.parseSessionCookie(sessionId);
-            Integer userId = session.optInt("userId");
             articleService.remove(userId, articleId);
             Map<String, Object> result = new HashMap<>();
             return Utils.buildResponse(0, "删除成功", result);
@@ -101,8 +97,7 @@ public class ArticleController {
     }
 
     @GetMapping("/v1/articles/{articleId}")
-    public Map<String, Object> Detail(@PathVariable("articleId") Integer articleId, Integer userId) throws Exception {
-        System.out.println("helloworld userId " + userId);
+    public Map<String, Object> Detail(@PathVariable("articleId") Integer articleId) throws Exception {
         Article article = articleService.getDetail(articleId);
         Map<String, Object> result = new HashMap<>();
         result.put("article", article);

@@ -101,7 +101,8 @@ public class ArticleController {
     }
 
     @GetMapping("/v1/articles/{articleId}")
-    public Map<String, Object> Detail(@PathVariable("articleId") Integer articleId) throws Exception {
+    public Map<String, Object> Detail(@PathVariable("articleId") Integer articleId, Integer userId) throws Exception {
+        System.out.println("helloworld userId " + userId);
         Article article = articleService.getDetail(articleId);
         Map<String, Object> result = new HashMap<>();
         result.put("article", article);

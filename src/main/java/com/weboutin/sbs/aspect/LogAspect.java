@@ -17,6 +17,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -24,6 +26,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Aspect
 @Component
 public class LogAspect {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Pointcut("execution(* com.weboutin.sbs..controller.*.*(..))")
     public void controllerAspect() {
@@ -37,7 +41,7 @@ public class LogAspect {
     public void doBefore(JoinPoint joinPoint) throws InterruptedException {
         for (Object arg : joinPoint.getArgs()) {
             if (arg instanceof String) {
-                System.out.println(arg);
+                log.info(arg.toString());
             }
         }
     }

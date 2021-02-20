@@ -2,12 +2,14 @@
 package com.weboutin.sbs.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import com.weboutin.sbs.annotation.NeedLogin;
 import com.weboutin.sbs.service.UserService;
 import com.weboutin.sbs.utils.Utils;
 
@@ -43,5 +45,12 @@ public class UserController {
 			e.printStackTrace();
 			return Utils.buildResponse(-1, "系统异常", new HashMap<>());
 		}
+	}
+
+	@NeedLogin
+	@DeleteMapping("/v1/users")
+	public Map<String, Object> remove(Integer userId) throws Exception {
+		userService.remove(userId);
+		return Utils.buildResponse(0, "删除成功", new HashMap<String, Object>());
 	}
 }

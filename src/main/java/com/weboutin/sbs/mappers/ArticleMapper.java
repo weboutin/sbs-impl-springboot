@@ -30,4 +30,7 @@ public interface ArticleMapper {
 
     @Delete("delete from `sbs-articles` where user_id=#{article.userId} and id=#{article.articleId}")
     Integer removeArticleById(@Param("article") Article article);
+
+    @Delete("delete from `sbs-articles` where user_id=#{userId}")
+    int removeArticlesByUserId(@Param("userId") Integer userId);
 }

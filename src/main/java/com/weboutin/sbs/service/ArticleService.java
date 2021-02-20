@@ -4,11 +4,17 @@ import java.util.Date;
 import java.util.List;
 import com.weboutin.sbs.entity.Article;
 import com.weboutin.sbs.mappers.ArticleMapper;
+
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ArticleService {
+
+    @Autowired
+    private JedisConnectionFactory jedisConnectionFactory;
 
     @Autowired
     private ArticleMapper articleMapper;
@@ -26,6 +32,10 @@ public class ArticleService {
     }
 
     public List<Article> getAll(int page, int size) throws Exception {
+        String result = new String(jedisConnectionFactory.getConnection().get("hello".getBytes()));
+        System.out.println(result);
+
+
         List<Article> articles = articleMapper.getArticles(page, size);
         return articles;
     }

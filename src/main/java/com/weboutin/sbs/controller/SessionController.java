@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.weboutin.sbs.enums.CommonEnum;
 import com.weboutin.sbs.service.SessionService;
 import com.weboutin.sbs.utils.Utils;
 
@@ -34,9 +35,9 @@ public class SessionController {
 
             Map<String, Object> result = new HashMap<>();
             result.put("userId", userId);
-            return Utils.buildResponse(0, "登录成功", result);
+            return Utils.buildResponseWithEnum(CommonEnum.LOGIN_SUCCESS, result);
         } catch (JSONException e) {
-            return Utils.buildResponse(1, "参数错误", new HashMap<>());
+            return Utils.buildResponseWithEnum(CommonEnum.ARGUMENT_INVALID, new HashMap<>());
         } catch (Exception e) {
             if (e.getMessage() == null) {
                 e.printStackTrace();

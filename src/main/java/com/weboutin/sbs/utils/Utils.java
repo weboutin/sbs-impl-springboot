@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.weboutin.sbs.enums.CommonEnum;
+
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -23,6 +25,14 @@ public class Utils {
         Map<String, Object> result = new HashMap<>();
         result.put("code", code);
         result.put("msg", message);
+        result.put("data", data);
+        return result;
+    }
+
+    public static Map<String, Object> buildResponseWithEnum(CommonEnum e, Map<String, Object> data) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("code", e.getCode());
+        result.put("msg", e.getMsg());
         result.put("data", data);
         return result;
     }

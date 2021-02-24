@@ -3,9 +3,11 @@ package com.weboutin.sbs;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @SpringBootApplication
 @MapperScan("com.weboutin.sbs.mappers")
+@ServletComponentScan("com.weboutin.sbs.filter")
 public class SbsApplication {
 
 	public static void main(String[] args) {
